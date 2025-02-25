@@ -40,15 +40,11 @@ export default function Index() {
       {url && (
         <View className="flex-1 bg-white">
           <View className="flex-row justify-between items-center p-2">
-            <View />
             <Pressable
-              className="bg-sky-600 p-2 rounded-lg w-[100px] flex-row items-center gap-2"
+              className="bg-sky-600 p-2 rounded-xl"
               onPress={() => setUrl("")}
             >
               <Ionicons name="chevron-back" size={24} color="white" />
-              <Text className="text-white font-bold text-xl text-center">
-                BACK
-              </Text>
             </Pressable>
           </View>
           <WebViewScreen url={url} />
