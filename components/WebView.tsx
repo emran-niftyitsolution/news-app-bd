@@ -104,10 +104,7 @@ const WebViewScreen = ({ url }: Props) => {
         className="flex-1"
         source={{ uri: url }}
         injectedJavaScript={removeAdsScript}
-        onLoadStart={() => setLoading(false)} // Hide loader as soon as the WebView starts rendering
-        onLoad={() => {
-          // Optionally, you can do something after the page fully loads
-        }}
+        onLoadEnd={() => setLoading(false)} // Hide loader as soon as the WebView starts rendering
         onError={handleError} // Handle error
         onNavigationStateChange={onNavigationStateChange} // Handle navigation state change
         onMessage={handleMessage} // Handle messages from WebView
