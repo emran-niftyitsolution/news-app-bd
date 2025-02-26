@@ -1,7 +1,7 @@
 export const appData = [
   {
     id: 1,
-    name: "Daily Prothom alo",
+    name: "Prothom alo",
     url: "https://prothomalo.com",
     image: require("../assets/icons/prothom-alo.com.jpg"),
   },
