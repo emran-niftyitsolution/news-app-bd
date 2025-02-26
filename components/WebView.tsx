@@ -141,7 +141,7 @@ const WebViewScreen = ({ url }: Props) => {
     <View className="flex-1 h-screen overflow-hidden">
       {loading && (
         <View className="h-full justify-center items-center">
-          <ActivityIndicator size="large" color="green" />
+          <ActivityIndicator size="large" color="#db2777" />
         </View>
       )}
 

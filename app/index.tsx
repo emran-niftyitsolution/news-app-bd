@@ -45,7 +45,7 @@ export default function Index() {
           <View className="w-full h-20">
             <Image
               source={item.image}
-              className="w-full h-full rounded-lg"
+              className="w-full h-full rounded-xl"
               resizeMode="contain"
             />
           </View>
@@ -59,7 +59,7 @@ export default function Index() {
 
   return (
     <ImageBackground
-      source={require("../assets/images/background.jpg")}
+      source={require("../assets/images/background3.jpg")}
       className="flex-1"
       resizeMode="cover"
     >
@@ -68,8 +68,8 @@ export default function Index() {
           <>
             <View className="px-5 mb-5">
               <TextInput
-                placeholder="Search in English"
-                className="bg-white rounded-xl p-5 shadow-sm w-full"
+                placeholder="Search..."
+                className="rounded-xl p-5 shadow-sm w-full bg-white/70"
                 onChangeText={setSearchQuery}
               />
             </View>
@@ -94,7 +94,7 @@ export default function Index() {
           <View className="flex-1">
             <View className="flex-row justify-between items-center p-2">
               <Pressable
-                className="bg-sky-600 p-2 rounded-xl"
+                className="bg-pink-600 p-2 rounded-xl"
                 onPress={() => setUrl("")}
               >
                 <Ionicons name="chevron-back" size={24} color="white" />
