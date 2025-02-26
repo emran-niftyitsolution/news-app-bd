@@ -64,6 +64,9 @@ export default function Index() {
       source={require("../assets/images/background3.jpg")}
       className="flex-1"
       resizeMode="cover"
+      imageStyle={{
+        opacity: 0.6,
+      }}
     >
       <SafeAreaView className="flex-1 relative">
         {!url && (
