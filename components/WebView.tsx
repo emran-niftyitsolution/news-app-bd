@@ -12,41 +12,87 @@ const WebViewScreen = ({ url }: Props) => {
 
   // JavaScript to inject for blocking ads
   const removeAdsScript = `
-  (function() {
-    // Hide common ad-related elements using CSS
-    var adSelectors = [
-      'iframe', 
-      '.ad', 
-      '.ads', 
-      '.ad-banner', 
-      '[id^="ads"]', 
-      '[class^="ads"]', 
-      '.google-ads', 
-      '#google_ads', 
-      '.adsbygoogle', 
-      '.ad-container', 
-      '[id*="ad-"]', 
-      '.sponsored', 
-      '.promo', 
-      '.banner-ad', 
-      '.ad-box', 
-      '.sticky-ad', 
-      '.popup-ad'
-    ];
+ (function() {
+  // Hide common ad-related elements using CSS
+  var adSelectors = [
+    'iframe', 
+    '.ad', 
+    '.ads', 
+    '.ad-banner', 
+    '[id^="ads"]', 
+    '[class^="ads"]', 
+    '.google-ads', 
+    '#google_ads', 
+    '.adsbygoogle', 
+    '.ad-container', 
+    '[id*="ad-"]', 
+    '.sponsored', 
+    '.promo', 
+    '.banner-ad', 
+    '.ad-box', 
+    '.sticky-ad', 
+    '.popup-ad',
+    '.ad-unit',
+    '.advertisement'
+  ];
 
-    adSelectors.forEach(function(selector) {
-      var elements = document.querySelectorAll(selector);
-      elements.forEach(function(el) {
-        el.style.display = 'none';
-      });
+  adSelectors.forEach(function(selector) {
+    var elements = document.querySelectorAll(selector);
+    elements.forEach(function(el) {
+      el.style.display = 'none';
     });
-    
-    // Remove scripts that may be used to serve ads
-    var adScripts = document.querySelectorAll('script[src*="ads"], script[src*="advert"], script[src*="googleads"]');
-    adScripts.forEach(function(script) {
+  });
+
+  // Block known ad-related network requests (including Google and other ad servers)
+  var blockAdRequests = function(url) {
+    var adDomains = [
+      'googleadservices', 'doubleclick', 'ads', 'advertising', 'adservice', 'adserver',
+      'adclick', 'teads.tv', 'amazon-adsystem', 'adroll', 'outbrain', 'taboola', 'serving-sys',
+      'openx', 'rubiconproject', 'adnxs', 'ads.yahoo.com', 'adtech', 'adform', 'adsafe', 'contextweb'
+    ];
+    return adDomains.some(function(domain) {
+      return url.includes(domain);
+    });
+  };
+
+  // Block XMLHttpRequest to known ad servers
+  var originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method, url) {
+    if (blockAdRequests(url)) {
+      console.log('Blocked XMLHttpRequest to ad server:', url);
+      return;
+    }
+    originalOpen.apply(this, arguments);
+  };
+
+  // Block fetch requests for ad servers
+  var originalFetch = window.fetch;
+  window.fetch = function(resource, options) {
+    if (blockAdRequests(resource)) {
+      console.log('Blocked fetch request to ad server:', resource);
+      return Promise.resolve(new Response('', { status: 204 })); // Empty response to block
+    }
+    return originalFetch.apply(this, arguments);
+  };
+
+  // Remove scripts that may be used to serve ads
+  var adScriptPatterns = ['ads', 'advert', 'googleads', 'doubleclick', 'googlesyndication', 'taboola', 'teads'];
+  var adScripts = document.querySelectorAll('script[src]');
+  adScripts.forEach(function(script) {
+    var src = script.src;
+    if (adScriptPatterns.some(function(pattern) { return src.includes(pattern); })) {
+      console.log('Removed ad script:', src);
       script.remove();
-    });
-  })();
+    }
+  });
+
+  // Remove anchor tags or links with URLs that match ad-related domains
+  var adLinks = document.querySelectorAll('a[href*="googleadservices"], a[href*="doubleclick"], a[href*="ads"], a[href*="advert"], a[href*="google.com/pagead"]');
+  adLinks.forEach(function(link) {
+    console.log('Blocked ad link:', link.href);
+    link.style.display = 'none';
+  });
+})();
 `;
 
   // Callback for handling navigation requests in WebView
