@@ -21,8 +21,10 @@ export default function Index() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setFilteredData(
-        appData.filter((item) =>
-          item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        appData.filter(
+          (item) =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.nameInBn.toLowerCase().includes(searchQuery.toLowerCase())
         )
       );
     }, 300);
