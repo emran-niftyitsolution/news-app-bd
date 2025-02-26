@@ -23,7 +23,7 @@ export default function Index() {
                 {item.image ? (
                   <View className="w-full h-20">
                     <Image
-                      source={{ uri: item.image }}
+                      source={item.image}
                       className="w-full h-full rounded-lg"
                       resizeMode="contain"
                     />
